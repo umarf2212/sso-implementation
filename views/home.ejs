@@ -5,6 +5,11 @@
 </head>
 <body>
   <h1>Welcome to the App</h1>
-  <a href="/auth/google">Login with Google</a>
+  <% if (user) { %>
+    <p>Welcome, <%= user.email %></p>
+    <a href="/logout">Logout</a>
+  <% } else { %>
+    <a href="/auth/google">Login with Google</a>
+  <% } %>
 </body>
 </html>

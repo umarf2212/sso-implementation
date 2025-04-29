@@ -48,7 +48,7 @@ passport.use(
 );
 
 app.get("/", (req, res) => {
-  res.render("home");
+  res.render("home", { user: req.user });
 });
 
 app.get("/auth/google", passport.authenticate("google", { scope: ["email"] }));
@@ -66,12 +66,13 @@ app.get("/profile", (req, res) => {
   res.render("profile", { user });
 });
 
-app.get("/logout", (req, res, next) => {
-  req.logout((err) => {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/");
+app.get("/logout", function (req, res, next) {
+  req.logout(function (err) {
+    if (err) return next(err);
+    req.session.destroy(() => {
+      res.clearCookie("connect.sid");
+      res.redirect("/");
+    });
   });
 });
 
